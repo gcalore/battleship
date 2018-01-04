@@ -33,13 +33,17 @@ const base = {
     filename: 'index_bundle.js'
   },
   module: {
-    loaders: [
+    rules: [
       {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
-      {test: /\.css$/, loader: 'style!css?sourceMap&modules&localIdentName=[name]__[local]___[hash:base64:5]'}
+      {test: /\.jsx$/, exclude: /node_modules/, loader: 'babel-loader'},
+      {test: /\.css$/, use: [{loader: "style-loader"}, {loader: "css-loader", options: {modules: true}}]},
+      {test: /\.scss$/,use: [{loader: "style-loader"}, {loader: "sass-loader", options: {modules: true}}]},
     ]
   },
   resolve: {
-    root: path.resolve('./app')
+    extensions: ['.js', '.jsx', '.ts'],
+    modules:[path.resolve('./app'), path.join(__dirname, 'node_modules')],
+
   }
 }
 
