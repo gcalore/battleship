@@ -34,14 +34,16 @@ const base = {
   },
   module: {
     rules: [
-      {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
+      {enforce: "pre", test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
       {test: /\.jsx$/, exclude: /node_modules/, loader: 'babel-loader'},
+      {test: /\.tsx?$/, loader: "awesome-typescript-loader" },
       {test: /\.css$/, use: [{loader: "style-loader"}, {loader: "css-loader", options: {modules: true}}]},
       {test: /\.scss$/,use: [{loader: "style-loader"}, {loader: "sass-loader", options: {modules: true}}]},
+
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     modules:[path.resolve('./app'), path.join(__dirname, 'node_modules')],
 
   }
