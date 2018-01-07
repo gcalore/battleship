@@ -1,6 +1,7 @@
 import webpack from 'webpack'
 import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import ExtractTextPlugin from 'extract-text-webpack-plugin'
 
 const LAUNCH_COMMAND = process.env.npm_lifecycle_event
 
@@ -37,15 +38,12 @@ const base = {
       {enforce: "pre", test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
       {test: /\.jsx$/, exclude: /node_modules/, loader: 'babel-loader'},
       {test: /\.tsx?$/, loader: "awesome-typescript-loader" },
-      {test: /\.css$/, use: [{loader: "style-loader"}, {loader: "css-loader", options: {modules: true}}]},
-      {test: /\.scss$/,use: [{loader: "style-loader"}, {loader: "sass-loader", options: {modules: true}}]},
-
+      {test: /\.scss$/,loader: ExtractTextPlugin.extract('css-loader!sass-loader')},
     ]
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     modules:[path.resolve('./app'), path.join(__dirname, 'node_modules')],
-
   }
 }
 
@@ -53,11 +51,12 @@ const developmentConfig = {
   devtool: 'cheap-module-inline-source-map',
   devServer: {
     contentBase: PATHS.build,
+    historyApiFallback: true,
     hot: true,
     inline: true,
     progress: true,
   },
-  plugins: [HTMLWebpackPluginConfig, new webpack.HotModuleReplacementPlugin()]
+  plugins: [HTMLWebpackPluginConfig, new webpack.HotModuleReplacementPlugin(),new ExtractTextPlugin('public/style.css', {allChunks: true})]
 }
 
 const productionConfig = {
